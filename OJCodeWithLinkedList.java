@@ -253,22 +253,86 @@ public class OJCodeWithLinkedList {
     }
 
 
+    // 9. 编写一个程序，找到两个单链表相交的起始节点。------力扣160
+    // (不带环的链表)
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        //1.分别求两个链表的长度
+        int lenA = size(headA);
+        int lenB = size(headB);
+        //2.让长的链表先走长的差值步
+        if (lenA > lenB) {
+            int offset = lenA - lenB;
+            for (int i = 0; i < offset; i++) {
+                headA = headA.next;
+            }
+        } else {
+            int offset = lenB - lenA;
+            for (int i = 0; i < offset; i++) {
+                headB = headB.next;
+            }
+        }
+        //3.分别让两个链表的结点同时移动，比较结点是否是相同节点
+        while (headA != null && headB != null) {
+            if (headA == headB) {
+                return headA;
+            }
+            headA = headA.next;
+            headB = headB.next;
+        }
+        return null;
+    }
 
 
+    // 10. 给定一个链表，判断链表中是否有环。 ------力扣
+    public boolean hasCycle(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
+    // 11. 给定一个链表，返回链表开始入环的第一个节点。 
+    //     如果链表无环，则返回 null
+    public ListNode detectCycle(ListNode head) {
+        // 从链表头部出发, 到入口点的距离,
+        // 从快慢指针的交汇处出发, 到入口点的距离
+        // 两个相等
+        if (head == null) {
+            return null;
+        }
 
-
-
-
-
-
-
-
-
-
-
-
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                break;
+            }
+        }
+        //链表不带环
+        if (fast == null || fast.next == null) {
+            return  null;
+        }
+        //循环结束之后, fast 和 slow 就已经重合了
+        ListNode cur1 = fast;
+        ListNode cur2 = head;
+        while (cur1 != cur2) {
+            cur1 = cur1.next;
+            cur2 = cur2.next;
+        }
+        return cur1;
+    }
 
 
 }
